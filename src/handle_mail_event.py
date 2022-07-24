@@ -61,7 +61,7 @@ def main(event, context):
         DateHeader.parse(message["Date"], kwds)
         message_date = kwds["datetime"]
 
-        amount = float(details.group(1))
+        amount = float(details.group(1)) * -1
         merchant = details.group(2)
 
         ynab.add_transaction(

@@ -22,5 +22,5 @@ def test_handler(ynab, lookup_param, get_s3_object):
 
         add_trans = ynab.add_transaction.call_args
         assert add_trans.args[1] == "MY FAVORITE STORE"
-        assert add_trans.args[2] == 27.82
+        assert add_trans.args[2] == -27.82
         assert add_trans.args[3].month == 7
