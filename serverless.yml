@@ -1,0 +1,70 @@
+service: spending-import
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  deploymentBucket:
+    name: iwappnetart-ue1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "s3:GetObject"
+          Resource: "arn:aws:s3:::${ssm:/app/${self:service}-${sls:stage}/eventBucket}/*"
+        - Effect: Allow
+          Action:
+            - "ssm:GetParameter"
+          Resource: "arn:aws:ssm:us-east-1:${aws:accountId}:parameter/app/${self:service}-${sls:stage}/*"
+
+  runtime: python3.9
+  memorySize: 128
+  timeout: 30
+  logRetentionInDays: 7
+
+  tags:
+    app: ${self:service}-${sls:stage}
+
+  disableRollback: true
+  environment:
+    APP_NAME: ${self:service}-${sls:stage}
+
+  s3:
+    MailBucket:
+      name: ${ssm:/app/${self:service}-${sls:stage}/eventBucket}
+
+functions:
+  handleMailEvent:
+    handler: src.handle_mail_event.main
+    events:
+      - s3: MailBucket
+
+resources:
+  Resources:
+    mailBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3BucketMailBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: AllowSESPuts
+              Effect: Allow
+              Principal:
+                Service: ses.amazonaws.com
+              Action: s3:PutObject
+              Resource:
+                !Join ["", ["arn:aws:s3:::", !Ref S3BucketMailBucket, "/*"]]
+              Condition:
+                StringEquals:
+                  AWS:SourceAccount: ${aws:accountId}
+
+package:
+  exclude:
+    - "**/**"
+    - "!src/**"
+    - "**/.pytest_cache/**"
+    - "**/__pycache__/**"
+
+plugins:
+  - serverless-python-requirements

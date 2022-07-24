@@ -1,0 +1,26 @@
+Delivered-To: redacted@redacted.com
+Received: by 2002:adf:a348:0:0:0:0:0 with SMTP id d8csp2750252wrb;
+        Wed, 20 Jul 2022 14:40:46 -0700 (PDT)
+Return-Path: <redacted@redacted.com>
+Received: from redacted.com (redacted.com. [1.1.1.1])
+        by redacted.com with ESMTPS id t37-20020a05622a182500b0031eb5dba8b6si159090qtc
+        for <redacted@redacted.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Jul 2022 14:40:46 -0700 (PDT)
+Date: Wed, 20 Jul 2022 17:40:44 -0400 (EDT)
+From: redacted <redacted@redacted.com>
+To: redacted@redacted.com
+Message-ID: <1340742251.40687258.1658353244967.JavaMail.webuser@redacted>
+Subject: Your $27.82 transaction with MY FAVORITE STORE
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml" lang=3D"en">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" />
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.=
+0"/>
+<title>This transaction is above the level you set, see more here.</title>
