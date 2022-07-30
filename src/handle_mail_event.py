@@ -62,7 +62,8 @@ def main(event, context):
         DateHeader.parse(message["Date"], kwds)
         message_date = kwds["datetime"]
 
-        amount = float(details.group(1)) * -1
+        amount_sanitized = details.group(1).replace(',', '')
+        amount = float(amount_sanitized) * -1
         merchant = details.group(2)
 
         logger.info(f'Adding YNAB Transaction for merchant {merchant}')

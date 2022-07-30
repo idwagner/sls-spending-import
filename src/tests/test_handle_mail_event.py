@@ -18,7 +18,7 @@ def test_handler(ynab, lookup_param, get_s3_object):
     with open(relative_filename("data/transaction_alert.txt"), "rb") as email_body:
 
         get_s3_object.return_value = email_body
-        handle_mail_event.main({"Records": ["1"]}, MagicMock)
+        handle_mail_event.main({"Records": ["1"]}, MagicMock())
 
         add_trans = ynab.add_transaction.call_args
         assert add_trans.args[1] == "MY FAVORITE STORE"
