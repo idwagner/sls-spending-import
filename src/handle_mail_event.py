@@ -26,6 +26,7 @@ def get_s3_object(event_record):
     bucket = event_record["s3"]["bucket"]["name"]
     object_key = event_record["s3"]["object"]["key"]
 
+    logger.info(f'Retrieving event object at s3://{bucket}/{object_key}')
     item = s3.get_object(
         Bucket=bucket,
         Key=object_key,
@@ -36,7 +37,7 @@ def get_s3_object(event_record):
 
 def main(event, context):
 
-    logger.info(event)
+    logger.info(f'Starting event with id {context.aws_request_id}')
 
     app_name = os.environ.get("APP_NAME", "")
     ynab_token = lookup_param(f"/app/{app_name}/ynab_token")
@@ -64,6 +65,7 @@ def main(event, context):
         amount = float(details.group(1)) * -1
         merchant = details.group(2)
 
+        logger.info(f'Adding YNAB Transaction for merchant {merchant}')
         ynab.add_transaction(
             ynab_token,
             merchant,
