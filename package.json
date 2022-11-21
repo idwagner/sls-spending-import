@@ -1,4 +1,9 @@
 {
+  "name": "sls-spending-import",
+  "scripts": {
+    "deploy-dev": "serverless deploy --stage dev",
+    "deploy-prod": "serverless deploy --stage prod"
+  },
   "devDependencies": {
     "serverless-python-requirements": "^5.4.0"
   },

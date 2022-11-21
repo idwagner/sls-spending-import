@@ -31,3 +31,5 @@ MANIFEST
 
 .serverless
 node_modules
+
+yarn-error.log
