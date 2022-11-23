@@ -4,7 +4,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   deploymentBucket:
-    name: iwappnetart-ue1
+    name: ${ssm:/app/serverless/deploymentBucket}
   iam:
     role:
       statements:
@@ -60,7 +60,7 @@ resources:
                   AWS:SourceAccount: ${aws:accountId}
 
 package:
-  exclude:
+  patterns:
     - "**/**"
     - "!src/**"
     - "**/.pytest_cache/**"
