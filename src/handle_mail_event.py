@@ -11,7 +11,7 @@ from src import ynab
 logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
-SUBJECT_MATCH = re.compile(r"Your \$([0-9.,]+) transaction with (.+)")
+SUBJECT_MATCH = re.compile(r"You made a \$([0-9.,]+) transaction with (.+)")
 
 
 def lookup_param(name: str) -> str:
