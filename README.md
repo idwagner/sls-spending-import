@@ -1,21 +1,14 @@
-# Spending Event Import
+# Welcome to your CDK TypeScript project
 
-This Serverless Framework app processes email purchase notifications from a bank and imports then into [You Need A Budget](https://www.youneedabudget.com/).
+This is a blank project for CDK development with TypeScript.
 
-## External Requirements
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-1. AWS Account
-1. Registered domain verified with Amazon SES that can accept incoming mail.
-1. Event rule to publish email events to the s3 bucket created in this serverless app.
-1. YNAB account.
+## Useful commands
 
-## Setup
-
-This app has a few parameters that are needed for deployment. The Parameters are based on the deployment name, and will have a prefix `/app/${self:service}-${sls:stage}/`.
-
-| Parameter | Description |
-| -- | -- |
-| eventBucket | S3 Bucket name to use for incoming events (created in stack) |
-| ynab_token | Your YNAB API Bearer token |
-| ynab_budget_id | Your YNAB Budget ID |
-| ynab_account_id | Your YNAB Account ID |
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `npx cdk deploy`  deploy this stack to your default AWS account/region
+* `npx cdk diff`    compare deployed stack with current state
+* `npx cdk synth`   emits the synthesized CloudFormation template

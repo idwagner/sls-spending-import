@@ -1,0 +1,154 @@
+TemplateBody:
+  AWSTemplateFormatVersion: "2010-09-09"
+  Description: The AWS CloudFormation template for this Serverless application
+  Resources:
+    HandleMailEventLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/spending-import-prod-handleMailEvent
+        RetentionInDays: 7
+    IamRoleLambdaExecution:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName:
+              Fn::Join:
+                - '-'
+                - - spending-import
+                  - prod
+                  - lambda
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                    - logs:CreateLogGroup
+                  Resource:
+                    - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/spending-import-prod*:*
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/spending-import-prod*:*:*
+                - Effect: Allow
+                  Action:
+                    - s3:GetObject
+                  Resource: arn:aws:s3:::iwappnet0001-prod-ue1/*
+                - Effect: Allow
+                  Action:
+                    - ssm:GetParameter
+                  Resource: arn:aws:ssm:us-east-1:741798885227:parameter/app/spending-import-prod/*
+        Path: /
+        RoleName:
+          Fn::Join:
+            - '-'
+            - - spending-import
+              - prod
+              - Ref: AWS::Region
+              - lambdaRole
+    HandleMailEventLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Code:
+          S3Bucket: iwappnetart-ue1
+          S3Key: serverless/spending-import/prod/1659142420504-2022-07-30T00:53:40.504Z/spending-import.zip
+        Handler: src.handle_mail_event.main
+        Runtime: python3.9
+        FunctionName: spending-import-prod-handleMailEvent
+        MemorySize: 128
+        Timeout: 30
+        Tags:
+          - Key: app
+            Value: spending-import-prod
+        Environment:
+          Variables:
+            APP_NAME: spending-import-prod
+        Role:
+          Fn::GetAtt:
+            - IamRoleLambdaExecution
+            - Arn
+      DependsOn:
+        - HandleMailEventLogGroup
+    HandleMailEventLambdaVersionc0VN8SbjWLjcZjX9nlmCcN5qAiBlNAXOkPJemSh3g:
+      Type: AWS::Lambda::Version
+      DeletionPolicy: Retain
+      Properties:
+        FunctionName:
+          Ref: HandleMailEventLambdaFunction
+        CodeSha256: 7AaZ6UV8MvaHIF0i+zhXpRL3sBgwO7oTYyLjvaeMel4=
+    S3BucketMailBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: iwappnet0001-prod-ue1
+        NotificationConfiguration:
+          LambdaConfigurations:
+            - Event: s3:ObjectCreated:*
+              Function:
+                Fn::GetAtt:
+                  - HandleMailEventLambdaFunction
+                  - Arn
+      DependsOn:
+        - HandleMailEventLambdaPermissionMailBucketS3
+    HandleMailEventLambdaPermissionMailBucketS3:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Fn::GetAtt:
+            - HandleMailEventLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: s3.amazonaws.com
+        SourceArn:
+          Fn::Join:
+            - ""
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - :s3:::iwappnet0001-prod-ue1
+        SourceAccount:
+          Ref: AWS::AccountId
+    mailBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: S3BucketMailBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: AllowSESPuts
+              Effect: Allow
+              Principal:
+                Service: ses.amazonaws.com
+              Action: s3:PutObject
+              Resource:
+                Fn::Join:
+                  - ""
+                  - - 'arn:aws:s3:::'
+                    - Ref: S3BucketMailBucket
+                    - /*
+              Condition:
+                StringEquals:
+                  AWS:SourceAccount: "741798885227"
+  Outputs:
+    ServerlessDeploymentBucketName:
+      Value: iwappnetart-ue1
+      Export:
+        Name: sls-spending-import-prod-ServerlessDeploymentBucketName
+    HandleMailEventLambdaFunctionQualifiedArn:
+      Description: Current Lambda function version
+      Value:
+        Ref: HandleMailEventLambdaVersionc0VN8SbjWLjcZjX9nlmCcN5qAiBlNAXOkPJemSh3g
+      Export:
+        Name: sls-spending-import-prod-HandleMailEventLambdaFunctionQualifiedArn
+StagesAvailable:
+  - Original
+  - Processed

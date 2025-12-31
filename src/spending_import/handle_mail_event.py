@@ -6,7 +6,7 @@ import os
 from email.headerregistry import DateHeader
 
 import boto3
-from src import ynab
+from spending_import import ynab
 
 logger = logging.getLogger()
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
@@ -50,13 +50,12 @@ def main(event, context):
         message = email.message_from_bytes(body.read())
 
         if not "Subject" in message:
-            logger.error("Subject not found in message")
-            continue
+            raise ValueError("Subject not found in message")
 
         details = SUBJECT_MATCH.match(message["Subject"])
         if not details:
-            logger.error("Subject Does not match expected format")
-            continue
+            raise ValueError("Subject Does not match expected format")
+
 
         kwds = {}  # This dict is modified in-place
         DateHeader.parse(message["Date"], kwds)

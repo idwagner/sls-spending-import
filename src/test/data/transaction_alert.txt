@@ -11,7 +11,7 @@ Date: Wed, 20 Jul 2022 17:40:44 -0400 (EDT)
 From: redacted <redacted@redacted.com>
 To: redacted@redacted.com
 Message-ID: <1340742251.40687258.1658353244967.JavaMail.webuser@redacted>
-Subject: Your $27.82 transaction with MY FAVORITE STORE
+Subject: You made a $27.82 transaction with MY FAVORITE STORE
 MIME-Version: 1.0
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
