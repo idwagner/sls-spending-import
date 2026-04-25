@@ -29,7 +29,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-.serverless
-node_modules
+# UV
+.venv/
 
-yarn-error.log
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup

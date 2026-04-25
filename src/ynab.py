@@ -1,10 +1,8 @@
-from ast import Str
 from datetime import date, datetime
-from pynab.client import YNABClient, get_credentials
+from pynab.client import YNABClient
 from pynab.openapi.models.save_transaction_wrapper import SaveTransactionWrapper
 from pynab.openapi.models.save_transaction import SaveTransaction
 from pynab.openapi import Configuration
-from pyparsing import str_type
 
 
 def get_client(ynab_token: str) -> YNABClient:
